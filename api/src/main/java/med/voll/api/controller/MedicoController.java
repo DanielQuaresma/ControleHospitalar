@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +38,10 @@ public class MedicoController {
 
     @RequestMapping("/listar")
     @GetMapping
-   public Page<ListagemMedicoDTO> listaMedicos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
-        return repository.findAllByAtivoTrue(paginacao).map(ListagemMedicoDTO::new);
+   public ResponseEntity<Page<ListagemMedicoDTO>> listaMedicos(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
+        var page = repository.findAllByAtivoTrue(paginacao).map(ListagemMedicoDTO::new);
+
+        return ResponseEntity.ok(page);
     }
 
     @PutMapping
